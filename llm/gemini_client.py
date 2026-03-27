@@ -1,13 +1,11 @@
-import google.generativeai as genai
+from google import genai
 from config import GOOGLE_API_KEY
 
-genai.configure(api_key = GOOGLE_API_KEY)
-
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=GOOGLE_API_KEY)
 
 def ask_llm(prompt):
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt
+    )
     return response.text
-
-
-    
