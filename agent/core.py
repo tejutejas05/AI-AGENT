@@ -1,25 +1,28 @@
-# Brain of the agent (LLM)
-
+from agent.memory import Memory
+from agent.planner import decide_action
 from tools.calculator import calculate
-# this will import the tools from the tools folder
 from tools.time_tool import get_time
-from llm.openai_client import ask_llm
+from llm.gemini_client import ask_llm
 
-
-
-# the Prompt template we are going to use for this agent
+memory = Memory()
 
 def run_agent(user_input):
 
-    if "time" in user_input.lower():
-        return get_time()
+    context = memory.get_context()
 
-    elif "calculate" in user_input.lower():
+    action = decide_action(user_input, context)
+
+    if "calculator" in action:
         expression = user_input.replace("calculate", "")
-        return calculate(expression)
+        result = calculate(expression)
+
+    elif "time" in action:
+        result = get_time()
 
     else:
-        return ask_llm(user_input)
-        #here the llm folder should be get accessed 
+        prompt = f"{context}\nUser: {user_input}"
+        result = ask_llm(prompt)
 
+    memory.add(user_input, result)
 
+    return result

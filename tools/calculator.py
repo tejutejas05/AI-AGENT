@@ -1,6 +1,5 @@
 def calculate(expression):
     try:
         return str(eval(expression))
-    except:
-        return "Error in calculation"
-        
+    except Exception as e:
+        return f"Error: {str(e)}"
