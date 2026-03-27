@@ -1,11 +1,13 @@
-from openai import openai
-client = OpenAI()
+import google.generativeai as genai
+from config import GOOGLE_API_KEY
+
+genai.configure(api_key = GOOGLE_API_KEY)
+
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 def ask_llm(prompt):
-    response = client.chat.completions.create(
-        model = "gtp-4o-mini"
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response.choices[0].message.content
+    response = model.generate_content(prompt)
+    return response.text
+
 
     
